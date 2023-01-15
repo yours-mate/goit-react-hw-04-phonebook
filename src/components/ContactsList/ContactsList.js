@@ -3,15 +3,17 @@ import { ContactListItem } from 'components/ContactListItem/ContactListItem';
 
 export function ContactsList({ contacts, handleDelete }) {
   return (
-    <ul>
-      {contacts.map(contact => (
-        <ContactListItem
-          contact={contact}
-          handleDelete={handleDelete}
-          key={contact.id}
-        />
-      ))}
-    </ul>
+    <div>
+      <ul>
+        {contacts.map(contact => (
+          <ContactListItem
+            contact={contact}
+            handleDelete={handleDelete}
+            key={contact.id}
+          />
+        ))}
+      </ul>
+    </div>
   );
 }
 

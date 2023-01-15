@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
@@ -44,13 +44,6 @@ export function App() {
     setFilter(evt.target.value);
   };
 
-  const handleSearch = () => {
-    const newContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-    return newContacts;
-  };
-
   const handleBtnDeleteClick = e => {
     const targetId = e.target.name;
     handleDelete(targetId);
@@ -60,7 +53,11 @@ export function App() {
     setContacts(contacts.filter(({ id }) => id !== targetId));
   };
 
-  const searchedContacts = handleSearch();
+  const searchedContacts = useMemo(() => {
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }, [contacts, filter]);
   return (
     <div
       style={{
@@ -74,10 +71,12 @@ export function App() {
       <ContactForm handleSubmit={handleFormSubmit} />
       <h2>Contacts</h2>
       <Filter handleFilterState={handleFilterState} />
-      <ContactsList
-        contacts={searchedContacts}
-        handleDelete={handleBtnDeleteClick}
-      />
+      {contacts.length > 0 && (
+        <ContactsList
+          contacts={searchedContacts}
+          handleDelete={handleBtnDeleteClick}
+        />
+      )}
     </div>
   );
 }
